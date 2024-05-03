@@ -3,7 +3,7 @@ console.log("hello start node server");
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const port = 3200;
+const port = process.env.port || 3200;
 const path = require("path");
 const indexRouter = require("./routes/index");
 var cors = require("cors");

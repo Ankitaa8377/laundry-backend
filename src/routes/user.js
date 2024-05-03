@@ -34,6 +34,9 @@ router.get(
     res.status(400).send({ error: error.message });
   }
 );
+router.get("/", (req, res) => {
+  res.send("deta is here");
+});
 router.post(
   "/oder",
   usercontroller.oderPlace,
