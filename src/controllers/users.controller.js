@@ -119,6 +119,7 @@ const oderPlace = async function (req, res) {
 };
 
 const getDressitem = async function (req, res) {
+  console.log("reach here");
   User.listDressitem()
     .then(async function (result) {
       return res.status(200).json(result);

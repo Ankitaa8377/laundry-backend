@@ -87,6 +87,7 @@ const listDressitem = () => {
         resolve(results.rows);
       })
       .catch(function (err) {
+        console.log("error", err);
         reject(err);
       });
   });
