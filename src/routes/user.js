@@ -38,8 +38,8 @@ router.get("/", (req, res) => {
   res.send("deta is here");
 });
 router.post(
-  "/oder",
-  usercontroller.oderPlace,
+  "/order",
+  usercontroller.orderPlace,
   (req, res) => {
     res.send(req.data);
   },

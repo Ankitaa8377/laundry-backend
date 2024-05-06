@@ -100,26 +100,49 @@ const Register = async function (req, res) {
 //   });
 // };
 
-const oderPlace = async function (req, res) {
+// const oderPlace = async function (req, res) {
+//   User.getOneUserById(req.body.user_id)
+//     .then((user_data) => {
+//       console.log("user_data", user_data);
+//       User.AddOder(req.body, user_data)
+//         .then((result) => {
+//           return res.status(200).json({
+//             message: "Successfully! orders added",
+//             statusCode: "200",
+//           });
+//         })
+//         .catch(function (error) {
+//           return res.status(400).json({
+//             message: error,
+//             statusCode: "400",
+//           });
+//         });
+//     })
+//     .catch(function (error) {
+//       return res.status(400).json({
+//         message: error,
+//         statusCode: "400",
+//       });
+//     });
+// };
+
+const orderPlace = async function (req, res) {
   try {
-    await Promise.all(
-      req.body.cartData.map((data) => User.AddOder(req.body, data))
-    );
+    const user_data = await User.getOneUserById(req.body.user_id);
+    const result = await User.addOrder(req.body, user_data);
     return res.status(200).json({
-      message: "Successfully! orders added",
-      statusCode: "200",
+      message: "Successfully! Order added",
+      statusCode: 200,
     });
   } catch (error) {
-    console.error("Error adding orders:", error);
     return res.status(400).json({
-      message: "Error adding orders",
-      statusCode: "400",
+      message: error.message,
+      statusCode: 400,
     });
   }
 };
 
 const getDressitem = async function (req, res) {
-  console.log("reach here");
   User.listDressitem()
     .then(async function (result) {
       return res.status(200).json(result);
@@ -170,7 +193,7 @@ module.exports = {
   Login,
   listUser,
   Register,
-  oderPlace,
+  orderPlace,
   LogOut,
   getDressitem,
 };
