@@ -52,13 +52,14 @@ async function getOneUserById(user_id) {
 const AddUser = (request, response) => {
   const { email, password, phone } = request;
   const is_delete = "0";
+  const is_admin = 0;
   let mobile_no_data = parseInt(phone);
   return new Promise(function (resolve, reject) {
     hashPassword(password)
       .then(function (hash) {
         return pool.query(
-          "INSERT INTO public.user(email, password, phone, is_delete) VALUES ($1,$2,$3,$4)",
-          [email, hash, mobile_no_data, is_delete]
+          "INSERT INTO public.user(email, password, phone, is_delete ,is_admin) VALUES ($1,$2,$3,$4,$5)",
+          [email, hash, mobile_no_data, is_delete, is_admin]
         );
       })
       .then(function (result) {
@@ -114,6 +115,22 @@ const getUsers = () => {
       });
   });
 };
+const getOrder = () => {
+  return new Promise(function (resolve, reject) {
+    pool
+      .query(
+        `SELECT ROW_NUMBER() OVER(ORDER BY order_id ) AS sr_no, * FROM public.order ORDER BY order_id ASC `,
+        []
+      )
+      .then(function (results) {
+        resolve(results.rows);
+      })
+      .catch(function (error) {
+        console.log("error", error);
+        reject(error);
+      });
+  });
+};
 
 // const AddOder = function (request, cart_data, response) {
 //   const { user_id, is_complete, address, toSelectTime, no_Of_days } = request;
@@ -161,7 +178,7 @@ const addOrder = function (request, user_data, response) {
     // Insert the order for the current item into the database
     pool
       .query(
-        "INSERT INTO public.oder(user_id, product_name, price, quantity, is_complete, dressitem_id, address, no_of_day, pick_up_time) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+        "INSERT INTO public.order(user_id, product_name, price, quantity, is_complete, dressitem_id, address, no_of_day, pick_up_time) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",
         [
           user_id,
           name,
@@ -291,4 +308,5 @@ module.exports = {
   addOrder,
   listDressitem,
   getOneUserById,
+  getOrder,
 };

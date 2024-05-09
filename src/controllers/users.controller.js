@@ -36,6 +36,7 @@ const Login = (req, res) => {
                 statusCode: "200",
                 user_id: user_id,
                 email: email,
+                role: user.is_admin,
               });
             }
           }
@@ -59,6 +60,7 @@ const Register = async function (req, res) {
         message:
           "This email address is already in use. Please try a different one",
         statusCode: "400",
+        status: "failed",
       });
     } else {
       let { email, password, phone } = JSON.parse(JSON.stringify(req.body));
@@ -166,6 +168,30 @@ const listUser = async function (req, res) {
       });
     });
 };
+const getOrderList = async function (req, res) {
+  try {
+    const result = await User.getOrder();
+    const data = result.map((e) => ({
+      id: e.order_id,
+      order_no: e.sr_no,
+      product_name: e.product_name,
+      price: e.price,
+      quantity: e.quantity,
+      is_complete: e.is_complete,
+      dressitem_id: e.dressitem_id,
+      address: e.address,
+      no_of_day: e.no_of_day,
+      pick_up_time: e.pick_up_time,
+    }));
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(400).json({
+      message: error.message,
+      statusCode: "400",
+    });
+  }
+};
+
 const LogOut = (req, res) => {
   User.isUserExists(req.body)
     .then((isExists) => {
@@ -196,4 +222,5 @@ module.exports = {
   orderPlace,
   LogOut,
   getDressitem,
+  getOrderList,
 };
