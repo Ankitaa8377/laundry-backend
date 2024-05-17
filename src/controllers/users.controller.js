@@ -71,7 +71,7 @@ const Register = async function (req, res) {
       })
         .then(async function (result) {
           return res.status(200).json({
-            message: "Succesfully! user Added",
+            message: "Succesfully! user added",
             statusCode: "200",
           });
         })

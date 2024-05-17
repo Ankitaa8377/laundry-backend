@@ -162,7 +162,14 @@ const getOrder = () => {
 // };
 
 const addOrder = function (request, user_data, response) {
-  const { user_id, is_complete, address, toSelectTime, no_Of_days } = request;
+  const {
+    user_id,
+    is_complete,
+    address,
+    toSelectTime,
+    no_Of_days,
+    selectedDate,
+  } = request;
   // Initialize variables to calculate grand total
   let totalPrice = 0;
   let totalQuantity = 0;
@@ -178,7 +185,7 @@ const addOrder = function (request, user_data, response) {
     // Insert the order for the current item into the database
     pool
       .query(
-        "INSERT INTO public.order(user_id, product_name, price, quantity, is_complete, dressitem_id, address, no_of_day, pick_up_time) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+        "INSERT INTO public.order(user_id, product_name, price, quantity, is_complete, dressitem_id, address, no_of_day, pick_up_time,selected_date) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
         [
           user_id,
           name,
@@ -189,6 +196,7 @@ const addOrder = function (request, user_data, response) {
           address,
           no_Of_days,
           toSelectTime,
+          selectedDate,
         ]
       )
       .then(() => {
@@ -263,6 +271,7 @@ const addOrder = function (request, user_data, response) {
      </tfoot>
    </table>
    <p><strong>Address:</strong> ${address}</p>
+   <p><strong>Pick-up Date:</strong> ${selectedDate}</p>
    <p><strong>No. of Days:</strong> ${no_Of_days}</p>
    <p><strong>Pick-up Time:</strong> ${toSelectTime}</p>
  </body>
